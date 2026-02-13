@@ -8,10 +8,28 @@ export default function App() {
   const [trail, setTrail] = useState([]);
   const [confetti, setConfetti] = useState([]);
 
-  // countdown
+  // Diagnostic: log device type
+  useEffect(() => {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    console.log('[DEBUG] Device type:', isMobile ? 'MOBILE' : 'DESKTOP');
+    console.log('[DEBUG] Window width:', window.innerWidth, 'px');
+    console.log('[DEBUG] Touch events supported:', 'ontouchstart' in window);
+  }, []);
+
+  // countdown - auto accept after 30 seconds
   useEffect(() => {
     if (timeLeft <= 0) {
       setNoIsYes(true);
+      // Auto accept after 30s with confetti
+      const pieces = Array.from({ length: 160 }).map((_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        delay: Math.random() * 2,
+        size: Math.random() * 12 + 6
+      }));
+      setConfetti(pieces);
+      setAccepted(true);
+      new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_4c3a1b2c47.mp3").play();
       return;
     }
     const t = setTimeout(() => {
@@ -24,13 +42,24 @@ export default function App() {
     return () => clearTimeout(t);
   }, [timeLeft]);
 
-  // cursor trail hearts
+  // cursor trail hearts - supports both mouse and touch
   useEffect(() => {
-    const move = e => {
-      setTrail(p => [...p.slice(-25), { x: e.clientX, y: e.clientY, id: Date.now() }]);
+    const handleMove = (e) => {
+      // Support both mouse and touch events
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      setTrail(p => [...p.slice(-25), { x: clientX, y: clientY, id: Date.now() }]);
     };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
+    
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("touchmove", handleMove, { passive: true });
+    window.addEventListener("touchstart", handleMove, { passive: true });
+    
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("touchmove", handleMove);
+      window.removeEventListener("touchstart", handleMove);
+    };
   }, []);
 
   // accept
@@ -53,7 +82,7 @@ export default function App() {
 
       {/* shooting stars */}
       {[...Array(8)].map((_,i)=>(
-        <span key={i} className="star"/>
+        <span key={i} className="star" style={{'--i': i}}/>
       ))}
 
       {/* cursor trail */}
@@ -63,12 +92,12 @@ export default function App() {
 
       {/* falling roses */}
       {[...Array(18)].map((_,i)=>(
-        <span key={i} className="rose">🌹</span>
+        <span key={i} className="rose" style={{'--i': i / 18}}>🌹</span>
       ))}
 
       {/* floating hearts */}
       {[...Array(30)].map((_,i)=>(
-        <span key={i} className="heart">❤️</span>
+        <span key={i} className="heart" style={{'--i': i / 30}}>❤️</span>
       ))}
 
       {/* confetti */}
@@ -96,11 +125,11 @@ export default function App() {
                 Will you be my Valentine? 💘
               </h1>
 
-              {!noIsYes && (
-                <p className="timer">
-                  No unlocks in {timeLeft}s 😈
-                </p>
-              )}
+              <p className="timer">
+                {noIsYes 
+                  ? "Time's up! 😈" 
+                  : `Time: ${timeLeft}s`}
+              </p>
 
               <div className="btns">
 
@@ -125,8 +154,7 @@ export default function App() {
             </>
           ) : (
             <h1 className="success">
-              SHE SAID YES 💍✨
-            </h1>
+"Thank you for accepting me as your Valentine."            </h1>
           )}
 
         </div>
