@@ -1,0 +1,167 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* background galaxy */
+.scene{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 30%,#ff7ac6 0%,transparent 25%),
+    radial-gradient(circle at 80% 70%,#a78bfa 0%,transparent 25%),
+    radial-gradient(circle at 50% 50%,#f9a8d4 0%,transparent 35%),
+    #070010;
+  animation:bgMove 30s linear infinite;
+}
+@keyframes bgMove{
+  to{background-position:200px 200px,-200px 200px,0 0}
+}
+
+
+/* border glow */
+.border-wrap{
+  padding:2px;
+  border-radius:30px;
+  background:linear-gradient(270deg,#ff4ecd,#ff6ec7,#a78bfa,#ff6ec7);
+  background-size:400%;
+  animation:borderMove 7s linear infinite;
+}
+@keyframes borderMove{
+  100%{background-position:400%}
+}
+
+
+/* card */
+.card{
+  padding:50px;
+  border-radius:inherit;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(25px);
+  text-align:center;
+  max-width:420px;
+  box-shadow:0 0 60px rgba(255,0,150,.25);
+}
+
+
+/* title */
+.title{
+  font-size:2.5rem;
+  font-weight:900;
+  color:white;
+  text-shadow:0 0 20px #ff4ecd;
+  margin-bottom:15px;
+}
+
+
+/* success */
+.success{
+  font-size:3rem;
+  font-weight:900;
+  color:white;
+  animation:pop .7s ease, glow 2s infinite alternate;
+}
+@keyframes pop{
+  from{transform:scale(.2);opacity:0}
+}
+@keyframes glow{
+  from{text-shadow:0 0 15px #ff4ecd}
+  to{text-shadow:0 0 60px #ff99dd}
+}
+
+
+/* buttons */
+.btns{display:flex;gap:25px;justify-content:center;margin-top:25px}
+
+.yes{
+  padding:15px 40px;
+  border-radius:16px;
+  font-weight:700;
+  color:white;
+  background:linear-gradient(to right,#ff4ecd,#ff6ec7);
+  box-shadow:0 10px 40px rgba(255,0,150,.7);
+  transition:.3s;
+}
+.yes:hover{transform:scale(1.15)}
+
+.no{
+  padding:15px 40px;
+  border-radius:16px;
+  background:#fb7185;
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+
+/* timer */
+.timer{color:#ffd1f7}
+
+
+/* trail */
+.trail{
+  position:fixed;
+  pointer-events:none;
+  animation:trail 1s forwards;
+}
+@keyframes trail{
+  to{transform:translateY(-40px);opacity:0}
+}
+
+
+/* hearts */
+.heart{
+  position:absolute;
+  left:calc(100% * var(--i));
+  animation:float 14s linear infinite;
+  opacity:.3;
+}
+@keyframes float{
+  from{transform:translateY(100vh)}
+  to{transform:translateY(-10vh)}
+}
+
+
+/* roses */
+.rose{
+  position:absolute;
+  left:calc(100% * var(--i));
+  animation:fall 18s linear infinite;
+}
+@keyframes fall{
+  from{transform:translateY(-10vh)}
+  to{transform:translateY(110vh)}
+}
+
+
+/* shooting stars */
+.star{
+  position:absolute;
+  width:2px;
+  height:120px;
+  background:linear-gradient(white,transparent);
+  animation:shoot 4s linear infinite;
+}
+@keyframes shoot{
+  from{transform:translate(-200px,-200px) rotate(45deg)}
+  to{transform:translate(120vw,120vh) rotate(45deg);opacity:0}
+}
+
+
+/* confetti */
+.confetti{
+  position:fixed;
+  top:-10px;
+  background:hsl(calc(360 * var(--i)),100%,70%);
+  animation:confetti 3s linear forwards;
+}
+@keyframes confetti{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
+
+
+
