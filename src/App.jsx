@@ -128,7 +128,8 @@ export default function App() {
               <p className="timer">
                 {noIsYes 
                   ? "Time's up! 😈" 
-                  : `Time: ${timeLeft}s`}
+                  : `  If you don’t click the “No” button within 30s, I think you’ll be my Valentine.
+: ${timeLeft}s`}
               </p>
 
               <div className="btns">
@@ -154,7 +155,7 @@ export default function App() {
             </>
           ) : (
             <h1 className="success">
-"Thank you for accepting me as your Valentine."            </h1>
+"Thank you for accepting me as your Valentine."         </h1>
           )}
 
         </div>
